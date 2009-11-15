@@ -557,7 +557,12 @@ Set_defaults ()
 	LH_BINARY_IMAGES="${LH_BINARY_IMAGES:-iso}"
 
 	# Setting apt indices
-	LH_BINARY_INDICES="${LH_BINARY_INDICES:-enabled}"
+	if echo ${LH_PACKAGES_LISTS} | grep -qs -E "(stripped|minimal)\b"
+	then
+		LH_BINARY_INDICES="${LH_BINARY_INDICES:-none}"
+	else
+		LH_BINARY_INDICES="${LH_BINARY_INDICES:-enabled}"
+	fi
 
 	# Setting bootloader
 	if [ -z "${LH_BOOTLOADER}" ]
@@ -745,11 +750,28 @@ Set_defaults ()
 	LH_SYSLINUX_TIMEOUT="${LH_SYSLINUX_TIMEOUT:-0}"
 
 	# Setting syslinux menu
-	LH_SYSLINUX_MENU="${LH_SYSLINUX_MENU:-disabled}"
+	case "${LH_DISTRIBUTION}" in
+		etch)
+			LH_SYSLINUX_MENU="${LH_SYSLINUX_MENU:-disabled}"
+			;;
+
+		*)
+			LH_SYSLINUX_MENU="${LH_SYSLINUX_MENU:-enabled}"
+			;;
+	esac
 
 	# Setting syslinux menu live entries
-	LH_SYSLINUX_MENU_LIVE_ENTRY="${LH_SYSLINUX_MENU_LIVE_ENTRY:-Start ${LH_ISO_APPLICATION}}"
-	LH_SYSLINUX_MENU_LIVE_ENTRY_FAILSAFE="${LH_SYSLINUX_MENU_LIVE_ENTRY_FAILSAFE:-${LH_SYSLINUX_MENU_LIVE_ENTRY} - Fail Safe}"
+	case "${LH_MODE}" in
+		debian|debian-release)
+			LH_SYSLINUX_MENU_LIVE_ENTRY="${LH_SYSLINUX_MENU_LIVE_ENTRY:-Live}"
+			LH_SYSLINUX_MENU_LIVE_ENTRY_FAILSAFE="${LH_SYSLINUX_MENU_LIVE_ENTRY_FAILSAFE:-${LH_SYSLINUX_MENU_LIVE_ENTRY} (failsafe)}"
+			;;
+
+		*)
+			LH_SYSLINUX_MENU_LIVE_ENTRY="${LH_SYSLINUX_MENU_LIVE_ENTRY:-Start ${LH_ISO_APPLICATION}}"
+			LH_SYSLINUX_MENU_LIVE_ENTRY_FAILSAFE="${LH_SYSLINUX_MENU_LIVE_ENTRY_FAILSAFE:-${LH_SYSLINUX_MENU_LIVE_ENTRY} (failsafe)}"
+			;;
+	esac
 
 	# Settings memtest menu entry
 	LH_SYSLINUX_MENU_MEMTEST_ENTRY="${LH_SYSLINUX_MENU_MEMTEST_ENTRY:-Memory test}"
