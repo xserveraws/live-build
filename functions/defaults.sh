@@ -7,8 +7,6 @@
 # This is free software, and you are welcome to redistribute it
 # under certain conditions; see COPYING for details.
 
-set -e
-
 Set_defaults ()
 {
 	## config/common
@@ -164,7 +162,7 @@ Set_defaults ()
 	fi
 
 	# Setting losetup
-	if [ -z "${LH_LOSETUP}" ]
+	if [ -z "${LH_LOSETUP}" ] || [ ! -x /sbin/${LH_LOSETUP} ]
 	then
 		# Workaround for loop-aes-utils divertion
 		# (loop-aes-utils' losetup lacks features).
@@ -222,11 +220,12 @@ Set_defaults ()
 	fi
 
 	# Setting live helper options
-	LH_BREAKPOINTS="${LH_BREAKPOINTS:-disabled}"
-	LH_DEBUG="${LH_DEBUG:-disabled}"
-	LH_FORCE="${LH_FORCE:-disabled}"
-	LH_QUIET="${LH_QUIET:-disabled}"
-	LH_VERBOSE="${LH_VERBOSE:-disabled}"
+	_BREAKPOINTS="${_BREAKPOINTS:-disabled}"
+	_COLOR="${_COLOR:-disabled}"
+	_DEBUG="${_DEBUG:-disabled}"
+	_FORCE="${_FORCE:-disabled}"
+	_QUIET="${_QUIET:-disabled}"
+	_VERBOSE="${_VERBOSE:-disabled}"
 
 	## config/bootstrap
 
@@ -381,11 +380,6 @@ Set_defaults ()
 				LH_LINUX_FLAVOURS="amd64"
 				;;
 
-			arm)
-				Echo_error "You need to specify the linux kernel flavour manually on arm (FIXME)."
-				exit 1
-				;;
-
 			hppa)
 				LH_LINUX_FLAVOURS="parisc"
 				;;
@@ -404,11 +398,6 @@ Set_defaults ()
 
 			ia64)
 				LH_LINUX_FLAVOURS="itanium"
-				;;
-
-			m68k)
-				Echo_error "You need to specify the linux kernel flavour manually on m68k (FIXME)."
-				exit 1
 				;;
 
 			powerpc)
@@ -434,6 +423,11 @@ Set_defaults ()
 				else
 					LH_LINUX_FLAVOURS="sparc64"
 				fi
+				;;
+
+			arm|armel|m68k)
+				Echo_error "You need to specify the linux kernel flavour manually on ${LH_ARCHITECTURE} (FIXME)."
+				exit 1
 				;;
 
 			*)
