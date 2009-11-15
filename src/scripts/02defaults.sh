@@ -147,6 +147,12 @@ Defaults ()
 		LIVE_MIRROR="http://ftp.debian.org/debian/"
 	fi
 
+	# Set debian keyring
+	if [ -z "${LIVE_REPOSITORY_KEYRING}" ]
+	then
+		LIVE_REPOSITORY_KEYRING="debian-archive-keyring"
+	fi
+
 	# Set debian security mirror
 	if [ -z "${LIVE_MIRROR_SECURITY}" ]
 	then
@@ -240,5 +246,11 @@ Defaults ()
 	if [ -z "${LIVE_SOURCE}" ]
 	then
 		LIVE_SOURCE="no"
+	fi
+
+	# Set disk volume
+	if [ -z "${LIVE_DISK_VOLUME}" ]
+	then
+		LIVE_DISK_VOLUME="Debian Live `date +%Y%m%d`"
 	fi
 }
