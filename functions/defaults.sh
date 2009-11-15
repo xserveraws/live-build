@@ -25,8 +25,8 @@ Set_defaults ()
 				LH_DISTRIBUTION="lenny"
 				;;
 
-			debian-edu)
-				LH_DISTRIBUTION="etch"
+			emdebian)
+				LH_DISTRIBUTION="sid"
 				;;
 		esac
 	fi
@@ -72,12 +72,12 @@ Set_defaults ()
 
 	# Setting apt recommends
 	case "${LH_MODE}" in
-		debian-edu)
-			LH_APT_RECOMMENDS="${LH_APT_RECOMMENDS:-disabled}"
+		debian)
+			LH_APT_RECOMMENDS="${LH_APT_RECOMMENDS:-enabled}"
 			;;
 
-		*)
-			LH_APT_RECOMMENDS="${LH_APT_RECOMMENDS:-enabled}"
+		emdebian)
+			LH_APT_RECOMMENDS="${LH_APT_RECOMMENDS:-disabled}"
 			;;
 	esac
 
@@ -138,7 +138,7 @@ Set_defaults ()
 					fi
 					;;
 
-				debian-edu)
+				*)
 					LH_INITRAMFS="live-initramfs"
 					;;
 			esac
@@ -162,7 +162,7 @@ Set_defaults ()
 	fi
 
 	# Setting losetup
-	if [ -z "${LH_LOSETUP}" ] || [ ! -x /sbin/${LH_LOSETUP} ]
+	if [ -z "${LH_LOSETUP}" ] || [ "${LH_LOSETUP}" != "/sbin/losetup.orig" ]
 	then
 		# Workaround for loop-aes-utils divertion
 		# (loop-aes-utils' losetup lacks features).
@@ -201,8 +201,8 @@ Set_defaults ()
 				LH_ROOT="debian-live"
 				;;
 
-			debian-edu)
-				LH_ROOT="edu-live"
+			emdebian)
+				LH_ROOT="emdebian-live"
 				;;
 		esac
 	fi
@@ -286,8 +286,8 @@ Set_defaults ()
 				esac
 				;;
 
-			debian-edu)
-				LH_MIRROR_BOOTSTRAP="http://ftp.skolelinux.no/debian/"
+			emdebian)
+				LH_MIRROR_BOOTSTRAP="http://buildd.emdebian.org/grip/"
 				;;
 		esac
 	fi
@@ -297,7 +297,15 @@ Set_defaults ()
 	# Setting security mirror to fetch packages from
 	if [ -z "${LH_MIRROR_CHROOT_SECURITY}" ]
 	then
-		LH_MIRROR_CHROOT_SECURITY="http://security.debian.org/"
+		case "${LH_MODE}" in
+			debian)
+				LH_MIRROR_CHROOT_SECURITY="http://security.debian.org/"
+				;;
+
+			emdebian)
+				LH_MIRROR_CHROOT_SECURITY="none"
+				;;
+		esac
 	fi
 
 	# Setting mirror which ends up in the image
@@ -316,8 +324,8 @@ Set_defaults ()
 				esac
 				;;
 
-			debian-edu)
-				LH_MIRROR_BINARY="http://ftp.skolelinux.no/debian/"
+			emdebian)
+				LH_MIRROR_BINARY="http://buildd.emdebian.org/grip/"
 				;;
 		esac
 	fi
@@ -325,7 +333,15 @@ Set_defaults ()
 	# Setting security mirror which ends up in the image
 	if [ -z "${LH_MIRROR_BINARY_SECURITY}" ]
 	then
-		LH_MIRROR_BINARY_SECURITY="http://security.debian.org/"
+		case "${LH_MODE}" in
+			debian)
+				LH_MIRROR_BINARY_SECURITY="http://security.debian.org/"
+				;;
+
+			emdebian)
+				LH_MIRROR_BINARY_SECURITY="none"
+				;;
+		esac
 	fi
 
 	# Setting categories value
@@ -360,8 +376,12 @@ Set_defaults ()
 
 	# Setting keyring packages
 	case "${LH_MODE}" in
-		debian-edu)
-			LH_KEYRING_PACKAGES="debian-edu-archive-keyring"
+		debian)
+			LH_KEYRING_PACKAGES="debian-archive-keyring"
+			;;
+
+		emdebian)
+			LH_KEYRING_PACKAGES="debian-archive-keyring"
 			;;
 	esac
 
@@ -481,6 +501,11 @@ Set_defaults ()
 			kde-desktop)
 				LH_PACKAGES_LISTS="$(echo ${LH_PACKAGES_LISTS} | sed -e 's|kde-desktop||') standard-x11"
 				LH_TASKS="$(echo ${LH_TASKS} | sed -e 's|standard||' -e 's|laptop||' -e 's|kde-desktop||' -e 's|desktop||') standard laptop kde-desktop desktop"
+				;;
+
+			lxde-desktop)
+				LH_PACKAGES_LISTS="$(echo ${LH_PACKAGES_LISTS} | sed -e 's|lxde-desktop||') standard-x11"
+				LH_TASKS="$(echo ${LH_TASKS} | sed -e 's|standard||' -e 's|laptop||' -e 's|lxde-desktop||' -e 's|desktop||') standard laptop lxde-desktop desktop"
 				;;
 
 			xfce-desktop)
@@ -632,8 +657,8 @@ Set_defaults ()
 				LH_ISO_APPLICATION="Debian Live"
 				;;
 
-			debian-edu)
-				LH_ISO_APPLICATION="Debian Edu Live"
+			emdebian)
+				LH_ISO_APPLICATION="Emdebian Live"
 				;;
 		esac
 	fi
@@ -652,8 +677,8 @@ Set_defaults ()
 				LH_ISO_VOLUME="Debian Live \$(date +%Y%m%d-%H:%M)"
 				;;
 
-			debian-edu)
-				LH_ISO_VOLUME="Debian Edu Live \$(date +%Y%m%d-%H:%M)"
+			emdebian)
+				LH_ISO_VOLUME="Emdebian Live \$(date +%Y%m%d-%H:%M)"
 				;;
 		esac
 	fi
@@ -683,8 +708,8 @@ Set_defaults ()
 				LH_NET_ROOT_PATH="/srv/debian-live"
 				;;
 
-			debian-edu)
-				LH_NET_ROOT_PATH="/srv/debian-edu-live"
+			emdebian)
+				LH_NET_ROOT_PATH="/srv/emdebian-live"
 				;;
 		esac
 	fi
