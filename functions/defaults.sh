@@ -319,10 +319,10 @@ Set_defaults ()
 		LH_MIRROR_BINARY_SECURITY="http://security.debian.org/"
 	fi
 
-	# Setting sections value
-	if [ -z "${LH_SECTIONS}" ]
+	# Setting categories value
+	if [ -z "${LH_CATEGORIES}" ]
 	then
-		LH_SECTIONS="main"
+		LH_CATEGORIES="main"
 	fi
 
 	## config/chroot
@@ -622,7 +622,7 @@ Set_defaults ()
 	LH_ISO_PREPARER="${LH_ISO_PREPARER:-live-helper \$VERSION; http://packages.qa.debian.org/live-helper}"
 
 	# Set iso publisher
-	LH_ISO_PUBLISHER="${LH_ISO_PUBLISHER:-Debian Live project; http://debian-live.alioth.debian.org/; debian-live-devel@lists.alioth.debian.org}"
+	LH_ISO_PUBLISHER="${LH_ISO_PUBLISHER:-Debian Live project; http://debian-live.alioth.debian.org/; debian-live@lists.debian.org}"
 
 	# Setting iso volume
 	if [ -z "${LH_ISO_VOLUME}" ]
