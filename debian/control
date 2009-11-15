@@ -3,12 +3,12 @@ Section: misc
 Priority: optional
 Maintainer: Debian Live <debian-live@lists.debian.org>
 Uploaders: Daniel Baumann <daniel@debian.org>
-Build-Depends: debhelper (>= 5)
+Build-Depends: debhelper (>= 7)
 Build-Depends-Indep: gettext
-Standards-Version: 3.8.0
+Standards-Version: 3.8.3
 Homepage: http://debian-live.alioth.debian.org/
-Vcs-Browser: http://git.debian.net/?p=debian-live/live-helper.git
-Vcs-Git: git://git.debian.net/git/debian-live/live-helper.git
+Vcs-Browser: http://live.debian.net/gitweb/?p=live-helper.git
+Vcs-Git: git://live.debian.net/git/live-helper.git
 
 Package: live-helper
 Architecture: all
