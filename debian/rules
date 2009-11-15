@@ -1,19 +1,16 @@
 #!/usr/bin/make -f
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
-
 upstream:
-	cd .. && git clone git://git.debian.org/git/users/daniel/live-helper.git || true
+	cd .. && git clone git://git.debian.org/git/users/daniel/live-helper.git
 	rm -rf ../live-helper/.git
-
-build:
 
 clean:
 	dh_testdir
 	dh_testroot
 
 	dh_clean
+
+build:
 
 install: build
 	dh_testdir
@@ -23,8 +20,6 @@ install: build
 
 	# Installing package
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/live-helper
-
-	install -D -m 0644 debian/changelog.live-package debian/live-helper/usr/share/doc/live-helper/changelog.Debian.live-package
 
 	install -D -m 0644 debian/default debian/live-helper/etc/default/live-helper
 
@@ -39,6 +34,8 @@ install: build
 
 	# Installing bug control
 	install -D -m 0755 debian/bug/script debian/live-helper/usr/share/bug/live-helper
+
+binary: binary-indep binary-arch
 
 binary-arch: build install
 
@@ -58,5 +55,4 @@ binary-indep: build install
 	dh_md5sums
 	dh_builddeb
 
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
+.PHONY: upstream clean build install binary binary-arch binary-indep
