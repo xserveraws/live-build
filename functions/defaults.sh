@@ -288,7 +288,7 @@ Set_defaults ()
 			debian|debian-release)
 				case "${LH_ARCHITECTURE}" in
 					amd64|i386)
-						LH_MIRROR_BOOTSTRAP="http://ftp.us.debian.org/debian/"
+						LH_MIRROR_BOOTSTRAP="http://ftp.de.debian.org/debian/"
 						;;
 
 					*)
@@ -348,15 +348,7 @@ Set_defaults ()
 	then
 		case "${LH_MODE}" in
 			debian|debian-release)
-				case "${LH_ARCHITECTURE}" in
-					amd64|i386)
-						LH_MIRROR_BINARY="http://ftp.us.debian.org/debian/"
-						;;
-
-					*)
-						LH_MIRROR_BINARY="http://ftp.de.debian.org/debian/"
-						;;
-				esac
+				LH_MIRROR_BINARY="http://cdn.debian.net/debian/"
 				;;
 
 			emdebian)
@@ -595,7 +587,7 @@ Set_defaults ()
 				if [ "${LH_CHROOT_FILESYSTEM}" = "squashfs" ]
 				then
 					case "${LH_DISTRIBUTION}" in
-						etch|lenny|squeeze)
+						etch|lenny)
 							LH_LINUX_PACKAGES="${LH_LINUX_PACKAGES} squashfs-modules-2.6"
 							;;
 					esac
@@ -621,7 +613,7 @@ Set_defaults ()
 	# Setting packages string
 	case "${LH_MODE}" in
 		ubuntu)
-			LH_PACKAGES="${LH_PACKAGES:-ubuntu-standard}"
+			LH_PACKAGES="${LH_PACKAGES:-ubuntu-minimal}"
 			;;
 
 		*)
@@ -743,6 +735,30 @@ Set_defaults ()
 	# Setting debian-installer distribution
 	LH_DEBIAN_INSTALLER_DISTRIBUTION="${LH_DEBIAN_INSTALLER_DISTRIBUTION:-${LH_DISTRIBUTION}}"
 
+	# Setting debian-installer-gui
+	case "${LH_MODE}" in
+		debian)
+			LH_DEBIAN_INSTALLER_GUI="${LH_DEBIAN_INSTALLER_GUI:-enabled}"
+			;;
+
+		ubuntu)
+			case "${LH_DEBIAN_INSTALLER_DISTRIBUTION}" in
+				karmic)
+					# Not available for Karmic currently.
+					LH_DEBIAN_INSTALLER_GUI="${LH_DEBIAN_INSTALLER_GUI:-disabled}"
+					;;
+
+				*)
+					LH_DEBIAN_INSTALLER_GUI="${LH_DEBIAN_INSTALLER_GUI:-enabled}"
+					;;
+			esac
+			;;
+
+		*)
+			LH_DEBIAN_INSTALLER_GUI="${LH_DEBIAN_INSTALLER_GUI:-disabled}"
+			;;
+	esac
+
 	# Setting debian-installer preseed filename
 	if [ -z "${LH_DEBIAN_INSTALLER_PRESEEDFILE}" ]
 	then
@@ -767,7 +783,7 @@ Set_defaults ()
 				;;
 
 			usb-hdd)
-				if [ "${LH_MODE}" = "ubuntu" ]
+				if [ "${LH_MODE}" = "ubuntu" ] || [ "${LH_DEBIAN_INSTALLER}" = "live" ]
 				then
 					_LH_BOOTAPPEND_PRESEED="file=/cdrom/install/${LH_DEBIAN_INSTALLER_PRESEEDFILE}"
 				else
@@ -791,9 +807,8 @@ Set_defaults ()
 
 	if [ -z "${LH_BOOTAPPEND_INSTALL}" ]
 	then
-		# Ubuntu's d-i is patched to be able to use usb-hdd block devices for
-		# install media if enabled by preseeding cdrom-detect/try-usb to true.
-		if [ "${LH_MODE}" = "ubuntu" ] && [ "${LH_BINARY_IMAGES}" = "usb-hdd" ]
+		# Try USB block devices for install media
+		if [ "${LH_BINARY_IMAGES}" = "usb-hdd" ]
 		then
 			LH_BOOTAPPEND_INSTALL="cdrom-detect/try-usb=true"
 		fi
