@@ -90,6 +90,8 @@ lh_config \- create configuration for live\-helper
 .br
 	[\fB\-\-grub\-splash\fR \fIFILE\fR]
 .br
+	[\fB\-\-gzip\-options\fR \fIOPTION\fR|"\fIOPTIONS\fR"]
+.br
 	[\fB\-\-hooks\fR \fIFILE\fR]
 .br
 	[\fB\-\-hostname\fR \fINAME\fR]
@@ -216,7 +218,7 @@ sets the ftp proxy to be used by apt. By default, this is empty but if the host 
 sets the http proxy to be used by apt. By default, this is empty but if the host has the environment variable http_proxy set, apt-http-proxy gets automatically set to the value of http_proxy.
 .IP "\fB\-\-apt\-pdiffs\fR enabled|disabled" 4
 defines whetever apt should use incremental package indices feature or not. This is enabled by default.
-.IP "\fB\-\-apt\-options\fR \fIOPTION\fR|"\fIOPTIONS\fR"" 4
+.IP "\fB\-\-apt\-options\fR \fIOPTION\fR|""\fIOPTIONS\fR""" 4
 defines the default options that will be appended to every apt call that is made inside chroot during the building of the image. By default, this is set to \-\-yes to allow non-interactive installation of packages.
 .IP "\fB\-\-aptitude\-options\fR \fIOPTION\fR|""\fIOPTIONS\fR""" 4
 defines the default options that will be appended to every aptitude call that is made inside chroot during building of the image. By default, this is set to \-\-assume\-yes to allow non-interactive installation of packages.
@@ -292,6 +294,8 @@ sets the filename of the fdisk binary from the host system that should be used. 
 sets the filename of the genisoimage binary from the host system that should be used. This is autodetected and does generally not need any customization.
 .IP "\fB\-\-grub\-splash\fR \fIFILE\fR" 4
 defines the name of an optional to be included splash screen graphic for the grub bootloader.
+.IP "\fB\-\-gzip\-options\fR \fIOPTION\fR|""\fIOPTIONS\fR""" 4
+defines the default options that will be appended to (almost) every gzip call during the building of the image. By default, this is set to \-\-best to use highest (but slowest) compression. Dynamically, if the host system supports it, also \-\-rsyncable is added.
 .IP "\fB\-\-hooks\fR \fIFILE\fR" 4
 defines which hooks available in /usr/share/live-helper/examples/hooks should be activated. Normally, there are no hooks executed. Make sure you know and understood the hook before you enable it.
 .IP "\fB\-\-hostname\fR \fINAME\fR" 4

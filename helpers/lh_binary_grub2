@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# lh_binary_grub(1) - installs grub into binary
+# lh_binary_grub2(1) - installs grub2 into binary
 # Copyright (C) 2006-2009 Daniel Baumann <daniel@debian.org>
 #
 # live-helper comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
@@ -13,7 +13,7 @@ set -e
 . "${LH_BASE:-/usr/share/live-helper}"/functions.sh
 
 # Setting static variables
-DESCRIPTION="$(Echo 'installs grub into binary')"
+DESCRIPTION="$(Echo 'installs grub2 into binary')"
 HELP=""
 USAGE="${PROGRAM} [--force]"
 
@@ -23,12 +23,12 @@ Arguments "${@}"
 Read_conffiles config/all config/common config/bootstrap config/chroot config/binary config/source
 Set_defaults
 
-if [ "${LH_BOOTLOADER}" != "grub" ]
+if [ "${LH_BOOTLOADER}" != "grub2" ]
 then
 	exit 0
 fi
 
-Echo_message "Begin installing grub..."
+Echo_message "Begin installing grub2..."
 
 # Requiring stage file
 Require_stagefile .stage/config .stage/bootstrap
@@ -36,8 +36,8 @@ Require_stagefile .stage/config .stage/bootstrap
 # Checking stage file
 Check_stagefile .stage/binary_grub
 
-# Checking grub templates
-Check_templates grub
+# Checking grub2 templates
+Check_templates grub2
 
 # Checking lock file
 Check_lockfile .lock
@@ -50,7 +50,7 @@ Check_architecture amd64 i386 lpia
 Check_crossarchitecture
 
 # Checking depends
-Check_package chroot/usr/sbin/grub grub
+Check_package chroot/usr/bin/grub-mkimage grub-pc
 
 # Restoring cache
 Restore_cache cache/packages_binary
@@ -66,9 +66,10 @@ Grub_live_entry ()
 	INITRD="${3}"
 	APPEND="${4}"
 
-	LINUX_LIVE="${LINUX_LIVE}\ntitle\t\tDebian GNU/Linux - ${LABEL}"
-	LINUX_LIVE="${LINUX_LIVE}\nkernel\t\t/${KERNEL} boot=${INITFS} LH_BOOTAPPEND_LIVE ${APPEND}"
+	LINUX_LIVE="${LINUX_LIVE}\nmenuentry \"Debian GNU/Linux - ${LABEL}\" {"
+	LINUX_LIVE="${LINUX_LIVE}\nlinux\t\t/${KERNEL} boot=${INITFS} LH_BOOTAPPEND_LIVE ${APPEND}"
 	LINUX_LIVE="${LINUX_LIVE}\ninitrd\t\t/${INITRD}"
+	LINUX_LIVE="${LINUX_LIVE}\n}"
 }
 
 Grub_install_entry ()
@@ -78,46 +79,15 @@ Grub_install_entry ()
 	INITRD="${3}"
 	APPEND="${4}"
 
-	# Boot in quiet mode where appropriate
-	if [ "${LH_DISTRIBUTION}" != "etch" ]
+	if [ "${LH_DISTRIBUTION}" != "etch" ] && [ "${LABEL}" != "rescue" ] && [ "${LABEL}" != "rescuegui" ]
 	then
-		QAPPEND="quiet"
+		APPEND="${APPEND} quiet"
 	fi
 
-	for TYPE in Install Expert Rescue Auto
-	do
-		case "${TYPE}" in
-			Install)
-				TAPPEND="${APPEND} ${QAPPEND}"
-				;;
-
-			Expert)
-				TAPPEND="priority=low ${APPEND}"
-				;;
-
-			Rescue)
-				TAPPEND="rescue/enable=true ${APPEND} ${QAPPEND}"
-				;;
-
-			Auto)
-				TAPPEND="auto=true priority=critical ${APPEND} ${QAPPEND}"
-				;;
-		esac
-
-		case "${LABEL}" in
-			Text)
-				TYPE_SUFFIX=""
-				;;
-			GUI)
-				TYPE_SUFFIX="gui"
-				;;
-		esac
-
-
-		LINUX_INSTALL="${LINUX_INSTALL}\ntitle\t\t${LABEL} ${TYPE}"
-		LINUX_INSTALL="${LINUX_INSTALL}\nkernel\t\t/${KERNEL} ${TAPPEND} ${LH_BOOTAPPEND_INSTALL}"
-		LINUX_INSTALL="${LINUX_INSTALL}\ninitrd\t\t/${INITRD}"
-	done
+	LINUX_INSTALL="${LINUX_INSTALL}\nmenuentry \"Debian GNU/Linux - ${LABEL}\" {"
+	LINUX_INSTALL="${LINUX_INSTALL}\nlinux\t\t/${KERNEL} ${APPEND} LH_BOOTAPPEND_INSTALL"
+	LINUX_INSTALL="${LINUX_INSTALL}\ninitrd\t\t/${INITRD}"
+	LINUX_INSTALL="${LINUX_INSTALL}\n}"
 }
 
 case "${LH_INITRAMFS}" in
@@ -243,8 +213,8 @@ LINUX_LIVE="$(/bin/echo ${LINUX_LIVE} | sed -e 's|binary||g' -e 's|//|/|g')"
 # Assembling debian-installer configuration
 if [ "${LH_DEBIAN_INSTALLER}" != "disabled" ]
 then
-	LINUX_LIVE="title\t\tLive:\nroot\n\n${LINUX_LIVE}"
-	LINUX_INSTALL="title\t\tInstaller:\nroot"
+	LINUX_LIVE="#\t \"Live\"\n${LINUX_LIVE}"
+	LINUX_INSTALL="#\t \"Installer\"\n"
 
 	VMLINUZ_DI="install/vmlinuz"
 	INITRD_DI="install/initrd.gz"
@@ -254,15 +224,14 @@ then
 	INITRD_GI="install/gtk/initrd.gz"
 	APPEND_GI="video=vesa:ywrap,mtrr vga=788"
 
-	if [ -f "binary/boot/${VMLINUZ_DI}" ] && [ -f "binary/boot/${INITRD_DI}" ]
-	then
-		Grub_install_entry "Text" "${VMLINUZ_DI}" "${INITRD_DI}" "${APPEND_DI}"
-	fi
-
-	if [ -f "binary/boot/${VMLINUZ_GI}" ] && [ -f "binary/boot/${INITRD_GI}" ]
-	then
-		Grub_install_entry "GUI" "${VMLINUZ_GI}" "${INITRD_GI}" "${APPEND_GI}"
-	fi
+	Grub_install_entry "install" "${VMLINUZ_DI}" "${INITRD_DI}" "${APPEND_DI}"
+	Grub_install_entry "installgui" "${VMLINUZ_GI}" "${INITRD_GI}" "${APPEND_GI}"
+	Grub_install_entry "expert" "${VMLINUZ_DI}" "${INITRD_DI}" "priority=low ${APPEND_DI}"
+	Grub_install_entry "expertgui" "${VMLINUZ_GI}" "${INITRD_GI}" "priority=low ${APPEND_GI}"
+	Grub_install_entry "rescue" "${VMLINUZ_DI}" "${INITRD_DI}" "rescue/enable=true ${APPEND_DI}"
+	Grub_install_entry "rescuegui" "${VMLINUZ_GI}" "${INITRD_GI}" "rescue/enable=true ${APPEND_GI}"
+	Grub_install_entry "auto" "${VMLINUZ_DI}" "${INITRD_DI}" "auto=true priority=critical ${APPEND_DI}"
+	Grub_install_entry "autogui" "${VMLINUZ_GI}" "${INITRD_GI}" "auto=true priority=critical ${APPEND_GI}"
 fi
 
 LINUX_INSTALL="$(/bin/echo ${LINUX_INSTALL} | sed -e 's|binary||g' -e 's|//|/|g')"
@@ -270,8 +239,8 @@ LINUX_INSTALL="$(/bin/echo ${LINUX_INSTALL} | sed -e 's|binary||g' -e 's|//|/|g'
 # Assembling memtest configuration
 if [ -f "${DESTDIR_LIVE}"/memtest ]
 then
-	MEMTEST="title\t\tOther:\nroot"
-	MEMTEST="${MEMTEST}\n\ntitle\t\t${LH_MEMTEST}\nkernel\t\t/$(basename ${DESTDIR_LIVE})/memtest"
+	MEMTEST="#\t \"Other\"\n"
+	MEMTEST="${MEMTEST}\nmenuentry\t\"${LH_MEMTEST}\" {\nlinux16\t$(basename ${DESTDIR_LIVE})/memtest\n}"
 	MEMTEST="$(/bin/echo ${MEMTEST} | sed -e 's|//|/|g')"
 fi
 
@@ -281,11 +250,11 @@ cp -r "${TEMPLATES}"/* binary/boot/grub
 
 case ${LH_BINARY_IMAGES} in
 	iso)
-		FILES="chroot/usr/lib/grub/*/stage2_eltorito"
+		FILES="chroot/usr/lib/grub/i386-pc/*.mod chroot/usr/lib/grub/i386-pc/*.lst chroot/usr/lib/grub/i386-pc/efiemu??.o chroot/usr/share/grub/*.pf2"
 		;;
 
 	tar|usb-hdd)
-		FILES="chroot/usr/lib/grub/*/stage1 chroot/usr/lib/grub/*/e2fs_stage1_5 chroot/usr/lib/grub/*/stage2"
+		FILES="chroot/usr/lib/grub/i386-pc/*"
 		;;
 esac
 
@@ -298,18 +267,15 @@ fi
 cp ${FILES} binary/boot/grub
 
 # Copying local configuration file
-if [ -f config/binary_grub/menu.lst ]
+if [ -f config/binary_grub/grub.cfg ]
 then
-	cp config/binary_grub/menu.lst binary/boot/grub/menu.lst
+	cp config/binary_grub/grub.cfg binary/boot/grub/grub.cfg
 fi
 
 # Copying splash screen
-if [ -f config/binary_grub/splash.xpm.gz ]
+if [ -f config/binary_grub/splash.tga ]
 then
-	LH_GRUB_SPLASH="config/binary_grub/splash.xpm.gz"
-elif [ -f config/binary_grub/splash.xpm ]
-then
-	LH_GRUB_SPLASH="config/binary_grub/splash.xpm"
+	LH_GRUB_SPLASH="config/binary_grub/splash.tga"
 fi
 
 if [ -n "${LH_GRUB_SPLASH}" ]
@@ -317,21 +283,21 @@ then
 	if [ "${LH_GRUB_SPLASH}" = "none" ]
 	then
 		# Removing splash file
-		rm -f binary/boot/grub/splash.xpm.gz
+		rm -f binary/boot/grub/splash.tga
 
 		# Removing splash entry
-		sed -i -e "s|splashimage.*||" binary/boot/grub/menu.lst
+		sed -i -e "s|background_image.*||" binary/boot/grub/grub.cfg
 	else
 		# Overwriting splash file
 		cp -f "${LH_GRUB_SPLASH}" binary/boot/grub
-		sed -i -e "s|splashimage.*|splashimage /boot/grub/$(basename ${LH_GRUB_SPLASH})|" binary/boot/grub/menu.lst
+		sed -i -e "s|background_image .*.tga|background_image \$\(root\)/boot/grub/$(basename ${LH_GRUB_SPLASH})|" binary/boot/grub/grub.cfg
 	fi
 fi
 
-sed -i -e "s|LINUX_LIVE|${LINUX_LIVE}|" -e "s|LINUX_INSTALL|${LINUX_INSTALL}|" -e "s|MEMTEST|${MEMTEST}|" binary/boot/grub/menu.lst
-sed -i -e "s|LH_BOOTAPPEND_INSTALL|${LH_BOOTAPPEND_INSTALL}|" -e "s|LH_BOOTAPPEND_LIVE|${LH_BOOTAPPEND_LIVE}|" binary/boot/grub/menu.lst
+sed -i -e "s|LINUX_LIVE|${LINUX_LIVE}|" -e "s|LINUX_INSTALL|${LINUX_INSTALL}|" -e "s|MEMTEST|${MEMTEST}|" binary/boot/grub/grub.cfg
+sed -i -e "s|LH_BOOTAPPEND_INSTALL|${LH_BOOTAPPEND_INSTALL}|" -e "s|LH_BOOTAPPEND_LIVE|${LH_BOOTAPPEND_LIVE}|" binary/boot/grub/grub.cfg
 
-sed -i -e 's|\ $||g' binary/boot/grub/menu.lst
+sed -i -e 's|\ $||g' binary/boot/grub/grub.cfg
 
 # Saving cache
 Save_cache cache/packages_binary
