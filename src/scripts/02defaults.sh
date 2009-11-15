@@ -99,7 +99,8 @@ Defaults ()
 				;;
 
 			i386)
-				if [ "${LIVE_DISTRIBUTION}" = "oldstable" ] || [ "${LIVE_DISTRIBUTION}" = "${CODENAME_OLDSTABLE}" ]
+				if [ "${LIVE_DISTRIBUTION}" = "oldstable" ] || [ "${LIVE_DISTRIBUTION}" = "${CODENAME_OLDSTABLE}" ] || \
+				   [ "${LIVE_DISTRIBUTION}" = "stable" ] || [ "${LIVE_DISTRIBUTION}" = "${CODENAME_STABLE}" ]
 				then
 					LIVE_KERNEL="386"
 				else
@@ -157,6 +158,21 @@ Defaults ()
 	if [ -z "${LIVE_MIRROR_SECURITY}" ]
 	then
 		LIVE_MIRROR_SECURITY="http://security.debian.org/"
+	fi
+
+	# Set default aptitude tasks
+	if [ "${LIVE_PACKAGE_LIST}" = "gnome-desktop" ]
+	then
+		LIVE_PACKAGE_LIST="gnome"
+		LIVE_TASKS="${LIVE_TASKS} gnome-desktop"
+	elif [ "${LIVE_PACKAGE_LIST}" = "kde-desktop" ]
+	then
+		LIVE_PACKAGE_LIST="kde"
+		LIVE_TASKS="${LIVE_TASKS} kde-desktop"
+	elif [ "${LIVE_PACKAGE_LIST}" = "xfce-desktop" ]
+	then
+		LIVE_PACKAGE_LIST="xfce"
+		LIVE_TASKS="${LIVE_TASKS} xfce-desktop"
 	fi
 
 	# Check for package lists

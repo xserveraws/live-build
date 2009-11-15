@@ -9,7 +9,8 @@ console-common locales
 # GNOME
 gdm gdm-themes gnome-desktop-environment gnome-cups-manager gnome-screensaver
 gnome-themes-extras
+desktop-base
 
 rhythmbox synaptic
 
-x-window-system-core xserver-xorg-input-all xserver-xorg-video-all xdebconfigurator
+x-window-system-core
