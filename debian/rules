@@ -1,28 +1,21 @@
 #!/usr/bin/make -f
 
-upstream:
-	cd .. && git clone git://git.debian.org/git/users/daniel/live-helper.git
-	rm -rf ../live-helper/.git
-
 clean:
 	dh_testdir
 	dh_testroot
 
-	# Cleaning message catalogs
 	$(MAKE) -C po clean
 
 	dh_clean
 
 build:
 	$(MAKE) test
-
-	# Updating message catalogs
 	$(MAKE) -C po update-po
 
 install: build
 	dh_testdir
 	dh_testroot
-	dh_prep
+	dh_clean -k
 	dh_installdirs
 
 	# Installing package
@@ -31,7 +24,7 @@ install: build
 	# Installing message catalogs
 	$(MAKE) -C po install DESTDIR=$(CURDIR)/debian/live-helper
 
-	install -D -m 0644 debian/default debian/live-helper/etc/default/live-helper_autobuild
+	install -D -m 0644 debian/live-helper.default debian/live-helper/etc/default/live-helper_autobuild
 
 	# Preparing alternatives
 	mv debian/live-helper/usr/share/live-helper/includes debian/live-helper/usr/share/live-helper/includes.debian
@@ -43,8 +36,8 @@ install: build
 	mv debian/live-helper/usr/share/doc/live-helper/ChangeLog.live-package debian/live-helper/usr/share/doc/live-helper/changelog.live-package
 
 	# Installing bug control
-	install -D -m 0644 debian/bug/presubj debian/live-helper/usr/share/bug/live-helper
-	install -D -m 0755 debian/bug/script debian/live-helper/usr/share/bug/live-helper
+	install -D -m 0644 debian/bug/live-helper.presubj debian/live-helper/usr/share/bug/live-helper
+	install -D -m 0755 debian/bug/live-helper.script debian/live-helper/usr/share/bug/live-helper
 
 binary: binary-indep
 
@@ -55,7 +48,6 @@ binary-indep: install
 	dh_testroot
 	dh_installchangelogs docs/ChangeLog
 	dh_installdocs
-	dh_install
 	dh_installlogrotate
 	dh_installcron
 	dh_installman
@@ -66,4 +58,4 @@ binary-indep: install
 	dh_md5sums
 	dh_builddeb
 
-.PHONY: upstream clean build install binary binary-arch binary-indep
+.PHONY: clean build install binary binary-arch binary-indep
