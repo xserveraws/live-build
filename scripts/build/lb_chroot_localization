@@ -612,12 +612,7 @@ then
 				Check_installed chroot/usr/bin/icedove icedove
 				if [ $INSTALL_STATUS -eq 0 ]
 				then
-					if [ "${LB_DISTRIBUTION}" = lenny ]
-					then
-						Check_package "" icedove-locale-"${ICEDOVE}"
-					else
-						Check_package "" icedove-l10n-"${ICEDOVE}"
-					fi
+					Check_package "" icedove-l10n-"${ICEDOVE}"
 				fi
 				;;
 
@@ -638,11 +633,6 @@ then
 				;;
 		esac
 	done
-
-	if [ "${LB_DISTRIBUTION}" = "lenny" ]
-	then
-		Check_installed chroot/usr/bin/gwenview gwenview; [ $INSTALL_STATUS -eq 0 ] && Check_package "" gwenview-i18n
-	fi
 
 	Check_installed chroot/usr/bin/k3b k3b; [ $INSTALL_STATUS -eq 0 ] && Check_package "" k3b-i18n
 

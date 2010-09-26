@@ -13,8 +13,6 @@ Vcs-Git: git://live.debian.net/git/live-build.git
 Package: live-build
 Architecture: all
 Depends: ${misc:Depends}, debootstrap | cdebootstrap | cdebootstrap-static
-Conflicts: live-helper (<< 2.0~a20)
-Replaces: live-helper
 Recommends: cpio, gettext-base, gnu-fdisk
 Suggests:
  dosfstools, genisoimage, memtest86+ | memtest86, mtools, parted,
@@ -26,22 +24,10 @@ Description: Debian Live - System Build Scripts
 
 Package: live-build-cgi
 Architecture: all
-Depends: ${misc:Depends}, live-helper (= ${source:Version})
-Conflicts: live-helper (<< 2.0~a20)
-Replaces: live-helper
+Depends: ${misc:Depends}
 Recommends: apache2 | httpd
 Description: Debian Live - System Build Scripts (cgi frontend)
  live-build contains the scripts that build a Debian Live system image from a
  configuration directory.
  .
  This package contains the cgi frontend.
-
-Package: live-helper
-Architecture: all
-Depends: ${misc:Depends}, live-build
-Description: Debian Live - System Build Scripts (transitional package)
- Package to ease upgrading from older live-helper packages to the new
- live-build package.
- .
- This package can be purged at anytime once the live-build package has been
- installed.

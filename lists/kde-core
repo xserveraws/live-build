@@ -3,11 +3,6 @@
 ## LH: KDE Core
 #include <standard-x11>
 
-#if DISTRIBUTION lenny
-kde-core
-#endif
-#if DISTRIBUTION squeeze wheezy sid
 kde-plasma-desktop
-#endif
 kdm
 desktop-base

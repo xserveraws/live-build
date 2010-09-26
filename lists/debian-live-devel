@@ -6,17 +6,9 @@
 # http://qa.debian.org/developer.php?login=debian-live@lists.debian.org
 
 # debian-live
-#if DISTRIBUTION lenny
-live-helper
-git-core
-grub
-#endif
-
-#if DISTRIBUTION squeeze wheezy sid
 live-build
 git
 grub-pc grub-legacy
-#endif
 
 debootstrap cdebootstrap
 syslinux
@@ -25,18 +17,10 @@ dosfstools genisoimage mtools parted squashfs-tools genext2fs mtd-tools
 fakeroot fakechroot sudo
 
 # kernel
-#if DISTRIBUTION lenny squeeze sid
 aufs-tools
-#endif
-#if DISTRIBUTION lenny
-aufs-source
-#endif
 qemu kqemu-source
 kvm kvm-source
 squashfs-tools
-#if DISTRIBUTION lenny
-squashfs-source
-#endif
 #linux-headers-2.6-all
 
 # some other stuff

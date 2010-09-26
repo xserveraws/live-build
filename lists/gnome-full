@@ -4,9 +4,4 @@
 #include <gnome>
 
 gnome
-#if DISTRIBUTION lenny
-gdm
-#endif
-#if DISTRIBUTION squeeze wheezy sid
 gdm3
-#endif

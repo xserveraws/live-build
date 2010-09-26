@@ -29,7 +29,6 @@ wipe
 
 ## Packages available as of squeeze
 
-#if DISTRIBUTION squeeze wheezy sid
 aesfix
 aeskeyfind
 afflib-tools
@@ -47,4 +46,3 @@ rifiuti
 rifiuti2
 safecopy
 shed
-#endif

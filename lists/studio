@@ -8,9 +8,6 @@
 
 alsa-tools
 alsa-tools-gui
-#if DISTRIBUTION sid
-ardour-gtk
-#endif
 ams
 amsynth
 artsbuilder

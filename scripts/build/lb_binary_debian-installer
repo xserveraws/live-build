@@ -367,17 +367,8 @@ then
 
 	case "${LB_MODE}" in
 		debian)
-			case "${LB_DISTRIBUTION}" in
-				lenny)
-					DI_REQ_PACKAGES="${DI_REQ_PACKAGES} console-setup kbd"
-					DI_PACKAGES="${DI_PACKAGES} console-setup kbd"
-					;;
-
-				*)
-					DI_REQ_PACKAGES="${DI_REQ_PACKAGES} console-setup keyboard-configuration kbd"
-					DI_PACKAGES="${DI_PACKAGES} console-setup keyboard-configuration kbd"
-					;;
-			esac
+			DI_REQ_PACKAGES="${DI_REQ_PACKAGES} console-setup keyboard-configuration kbd"
+			DI_PACKAGES="${DI_PACKAGES} console-setup keyboard-configuration kbd"
 			;;
 	esac
 

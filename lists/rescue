@@ -7,14 +7,10 @@
 #include <debian-forensics>
 
 # Other forensic packages
-#if DISTRIBUTION lenny squeeze wheezy sid
 scalpel
-#endif
 
 # Bootloaders
-#if DISTRIBUTION lenny squeeze wheezy sid
 syslinux-common
-#endif
 #if ARCHITECTURE amd64 i386
 grub lilo mbr syslinux
 #endif
@@ -99,9 +95,6 @@ gkermit
 netcat
 netcat6
 netmask
-#if DISTRIBUTION lenny
-openntpd
-#endif
 openssl
 openvpn
 strongswan
@@ -130,17 +123,11 @@ iptables
 knockd
 portsentry
 vlan
-#if DISTRIBUTION lenny
-zorp
-#endif
 
 # Essential networking
 netbase
 rdate
 ntpdate
-#if DISTRIBUTION lenny
-msntp
-#endif
 dhcp3-client
 ppp
 pppconfig
@@ -211,9 +198,6 @@ hping3
 icmpush
 macchanger
 medusa
-#if DISTRIBUTION lenny
-ndiff
-#endif
 netdiag
 netpipe-tcp
 nmap
@@ -221,10 +205,6 @@ ndisc6
 ngrep
 p0f
 packit
-#if DISTRIBUTION lenny
-paketto
-sing
-#endif
 python-scapy
 xprobe
 
@@ -251,9 +231,7 @@ sysfsutils
 udftools
 xfsdump
 xfsprogs
-#if DISTRIBUTION sid
 btrfs-tools
-#endif
 cryptsetup
 dmraid
 e2fsprogs
@@ -323,12 +301,7 @@ hostap-utils
 hostapd
 
 # Flab
-#if DISTRIBUTION lenny
-emacs22-nox
-#endif
-#if DISTRIBUTON squeeze wheezy sid
 emacs23-nox
-#endif
 build-essential gdb gfortran gnat
 
 #if ARCHITECTURE i386

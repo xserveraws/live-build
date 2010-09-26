@@ -5,7 +5,4 @@
 
 xorg xresprobe menu
 alsa-base alsa-utils
-
-#if DISTRIBUTION squeeze wheezy sid
 keyboard-configuration
-#endif

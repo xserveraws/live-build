@@ -379,8 +379,8 @@ Local_arguments ()
 				shift 2
 
 				case "${LB_DISTRIBUTION}" in
-					lenny-backports)
-						LB_DISTRIBUTION="lenny"
+					squeeze-backports)
+						LB_DISTRIBUTION="squeeze"
 						BACKPORTS="true"
 						;;
 				esac

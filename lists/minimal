@@ -13,6 +13,4 @@ eject file user-setup sudo
 gnupg
 #endif
 
-#if DISTRIBUTION wheezy
 live-config
-#endif

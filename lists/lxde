@@ -5,10 +5,5 @@
 
 lxde
 gdm
-#if DISTRIBUTION lenny
-lxnm
-#endif
-#if DISTRIBUTION squeeze wheezy sid
 network-manager-gnome
-#endif
 desktop-base
