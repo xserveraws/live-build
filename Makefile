@@ -2,7 +2,7 @@
 
 SHELL := sh -e
 
-LANGUAGES = de
+LANGUAGES = 
 
 SCRIPTS = cgi/* functions/* examples/*/*.sh examples/auto/* scripts/*.sh scripts/*/*
 
