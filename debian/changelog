@@ -1,3 +1,13 @@
+live-build (3.0.5+really+is+2.0.12-0.tails2) bugfix-9419-eatmydata-in-build-chroot; urgency=medium
+
+  * Adding LD_PRELOAD and FAKETIME to the list of variables
+    passed through to commands run with Chroot(). This fixes
+    Tails#9419, and will help with reproducible builds (Tails#5630).
+  * Fixing the build by not attempting to build non-existing German
+    manpages.
+
+ -- Tails developers <tails@boum.org>  Mon, 18 May 2015 17:25:16 +0200
+
 live-build (3.0.5+really+is+2.0.12-0.tails1) builder-wheezy; urgency=medium
 
   * Rebuild with a version number greater than Wheezy's one.
