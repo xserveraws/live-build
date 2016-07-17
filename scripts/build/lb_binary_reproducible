@@ -1,0 +1,53 @@
+#!/bin/sh
+
+## live-build(7) - System Build Scripts
+## Copyright (C) 2016 Chris Lamb <lamby@debian.org>
+##
+## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+set -e
+
+# Including common functions
+. "${LB_BASE:-/usr/share/live/build}"/scripts/build.sh
+
+# Setting static variables
+DESCRIPTION="$(Echo 'ensure binary image is reproducible')"
+HELP=""
+USAGE="${PROGRAM} [--force]"
+
+Arguments "${@}"
+
+# Reading configuration files
+Read_conffiles config/all config/common config/bootstrap config/chroot config/binary config/source
+Set_defaults
+
+if [ "${SOURCE_DATE_EPOCH:-}" = "" ]
+then
+	exit 0
+fi
+
+Echo_message "Begin ensuring binary image is reproducible..."
+
+# Requiring stage file
+Require_stagefile .stage/config .stage/bootstrap
+
+# Checking stage file
+Check_stagefile .stage/binary_reproducible
+
+# Checking lock file
+Check_lockfile .lock
+
+# Creating lock file
+Create_lockfile .lock
+
+# "Clamp" the time to SOURCE_DATE_EPOCH when the file is more recent to keep
+# the original times for files that have not been created or modified during
+# the build process:
+find binary -newermt "@${SOURCE_DATE_EPOCH}" -print0 | \
+	xargs -0r touch --no-dereference --date="@${SOURCE_DATE_EPOCH}"
+
+# Creating stage file
+Create_stagefile .stage/binary_reproducible

@@ -74,6 +74,7 @@ lb binary_includes ${*}
 lb binary_local-includes ${*}
 lb binary_local-hooks ${*}
 lb binary_checksums ${*}
+lb binary_reproducible ${*}
 
 if [ "${LB_BUILD_WITH_CHROOT}" != "true" ]
 then
