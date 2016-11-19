@@ -54,6 +54,13 @@ DISTRIBUTION="$(echo ${LB_DISTRIBUTION} | cut -b 1 | tr '[a-z]' '[A-Z]')"
 DISTRIBUTION="${DISTRIBUTION}$(echo ${LB_DISTRIBUTION} | cut -b 2-)"
 eval VERSION="$`echo RELEASE_${LB_DISTRIBUTION}`"
 
+if [ "${SOURCE_DATE_EPOCH:-}" = "" ]
+then
+	DATE="$(date +%Y%m%d-%H:%M)"
+else
+	DATE="$(date --utc --date="@${SOURCE_DATE_EPOCH}" +%Y%m%d-%H:%M)"
+fi
+
 case "${LB_MODE}" in
 	debian)
 		STRING="Official Snapshot ${ARCHITECTURE}"
@@ -85,23 +92,23 @@ fi
 
 case "${LB_DEBIAN_INSTALLER}" in
 	cdrom)
-		echo "${TITLE} ${VERSION} \"${DISTRIBUTION}\" - ${STRING} LIVE/CD Source $(date +%Y%m%d-%H:%M)" > source/.disk/info
+		echo "${TITLE} ${VERSION} \"${DISTRIBUTION}\" - ${STRING} LIVE/CD Source ${DATE}" > source/.disk/info
 		;;
 
 	true|netinst)
-		echo "${TITLE} ${VERSION} \"${DISTRIBUTION}\" - ${STRING} LIVE/NETINST Source $(date +%Y%m%d-%H:%M)" > source/.disk/info
+		echo "${TITLE} ${VERSION} \"${DISTRIBUTION}\" - ${STRING} LIVE/NETINST Source ${DATE}" > source/.disk/info
 		;;
 
 	live)
-		echo "${TITLE} ${VERSION} \"${DISTRIBUTION}\" - ${STRING} LIVE/INSTALL Source $(date +%Y%m%d-%H:%M)" > source/.disk/info
+		echo "${TITLE} ${VERSION} \"${DISTRIBUTION}\" - ${STRING} LIVE/INSTALL Source ${DATE}" > source/.disk/info
 		;;
 
 	businesscard)
-		echo "${TITLE} ${VERSION} \"${DISTRIBUTION}\" - ${STRING} LIVE/BC Source $(date +%Y%m%d-%H:%M)" > source/.disk/info
+		echo "${TITLE} ${VERSION} \"${DISTRIBUTION}\" - ${STRING} LIVE/BC Source ${DATE}" > source/.disk/info
 		;;
 
 	false)
-		echo "${TITLE} ${VERSION} \"${DISTRIBUTION}\" - ${STRING} LIVE Source $(date +%Y%m%d-%H:%M)" > source/.disk/info
+		echo "${TITLE} ${VERSION} \"${DISTRIBUTION}\" - ${STRING} LIVE Source ${DATE}" > source/.disk/info
 		;;
 esac
 
