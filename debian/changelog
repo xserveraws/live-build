@@ -1,6 +1,4 @@
-live-build (3.0.5+really+is+2.0.12-0.tails3~5.gbp4c5f73) UNRELEASED; urgency=medium
-
-  ** SNAPSHOT build @4c5f733aaac853d09100e0baff8b4bc5cffc1cb3 **
+live-build (3.0.5+really+is+2.0.12-0.tails3) builder-jessie; urgency=medium
 
   [ intrigeri ]
   * Use xorriso instead of genisoimage, by backporting (most of) lb_binary_iso
