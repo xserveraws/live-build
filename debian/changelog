@@ -1,10 +1,11 @@
-live-build (3.0.5+really+is+2.0.12-0.tails3~3.gbp0dbbb8) UNRELEASED; urgency=medium
+live-build (3.0.5+really+is+2.0.12-0.tails3~4.gbp0db7b2) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @0dbbb85213d923e3c2ab996e3f59145a3a1c87f1 **
+  ** SNAPSHOT build @0db7b2279bb871b902040e1cee1a68d22a8ce0e8 **
 
   [ intrigeri ]
   * Use xorriso instead of genisoimage, by backporting (most of) lb_binary_iso
     from live-build 5.x at commit 3c303e7f53f7843c1f621d0889c4c6fec241ffbf.
+  * Ensure that lb_binary_reproducible is executable once installed.
 
   [ Chris Lamb ]
   * Setting xorriso's "modification time" to SOURCE_DATE_EPOCH as a first step
@@ -13,6 +14,9 @@ live-build (3.0.5+really+is+2.0.12-0.tails3~3.gbp0dbbb8) UNRELEASED; urgency=med
     the chroot, otherwise the chroot operation resets the environment
     (Closes: #833118).
   * Add binary_reproducible script to clamp mtimes.
+  * Use SOURCE_DATE_EPOCH to populate binary and source image /.disk/info
+    timestamp.
+  * Use SOURCE_DATE_EPOCH when templating syslinux templates.
 
  -- intrigeri <intrigeri@boum.org>  Sat, 19 Nov 2016 13:54:34 +0000
 
