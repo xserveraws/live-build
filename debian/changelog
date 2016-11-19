@@ -1,3 +1,12 @@
+live-build (3.0.5+really+is+2.0.12-0.tails3~1.gbpc6db1b) UNRELEASED; urgency=medium
+
+  ** SNAPSHOT build @c6db1b96e6d9531181c92e0c4cbb8069ea0a65f7 **
+
+  * Use xorriso instead of genisoimage, by backporting (most of) lb_binary_iso
+    from live-build 5.x at commit 3c303e7f53f7843c1f621d0889c4c6fec241ffbf.
+
+ -- intrigeri <intrigeri@boum.org>  Sat, 19 Nov 2016 13:54:34 +0000
+
 live-build (3.0.5+really+is+2.0.12-0.tails2) bugfix-9419-eatmydata-in-build-chroot; urgency=medium
 
   * Adding LD_PRELOAD and FAKETIME to the list of variables
