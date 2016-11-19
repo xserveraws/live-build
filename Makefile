@@ -42,6 +42,7 @@ install:
 	# Installing shared data
 	mkdir -p $(DESTDIR)/usr/share/live/build
 	cp -r cgi data examples functions scripts hooks includes lists repositories templates $(DESTDIR)/usr/share/live/build
+	chmod +x $(DESTDIR)/usr/share/live/build/scripts/build/*
 
 	# Installing executables
 	mkdir -p $(DESTDIR)/usr/bin
