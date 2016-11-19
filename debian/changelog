@@ -1,9 +1,17 @@
-live-build (3.0.5+really+is+2.0.12-0.tails3~1.gbpc6db1b) UNRELEASED; urgency=medium
+live-build (3.0.5+really+is+2.0.12-0.tails3~2.gbpbdb2e2) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @c6db1b96e6d9531181c92e0c4cbb8069ea0a65f7 **
+  ** SNAPSHOT build @bdb2e2e8015e7f7e253af3e3f3fd13a8508355b3 **
 
+  [ intrigeri ]
   * Use xorriso instead of genisoimage, by backporting (most of) lb_binary_iso
     from live-build 5.x at commit 3c303e7f53f7843c1f621d0889c4c6fec241ffbf.
+
+  [ Chris Lamb ]
+  * Setting xorriso's "modification time" to SOURCE_DATE_EPOCH as a first step
+    for reproducible ISO images (Closes: #832689).
+  * Exposing exposes the SOURCE_DATE_EPOCH variable when running scripts inside
+    the chroot, otherwise the chroot operation resets the environment
+    (Closes: #833118).
 
  -- intrigeri <intrigeri@boum.org>  Sat, 19 Nov 2016 13:54:34 +0000
 
