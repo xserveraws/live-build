@@ -1,6 +1,6 @@
-live-build (3.0.5+really+is+2.0.12-0.tails3~2.gbpbdb2e2) UNRELEASED; urgency=medium
+live-build (3.0.5+really+is+2.0.12-0.tails3~3.gbp0dbbb8) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @bdb2e2e8015e7f7e253af3e3f3fd13a8508355b3 **
+  ** SNAPSHOT build @0dbbb85213d923e3c2ab996e3f59145a3a1c87f1 **
 
   [ intrigeri ]
   * Use xorriso instead of genisoimage, by backporting (most of) lb_binary_iso
@@ -12,6 +12,7 @@ live-build (3.0.5+really+is+2.0.12-0.tails3~2.gbpbdb2e2) UNRELEASED; urgency=med
   * Exposing exposes the SOURCE_DATE_EPOCH variable when running scripts inside
     the chroot, otherwise the chroot operation resets the environment
     (Closes: #833118).
+  * Add binary_reproducible script to clamp mtimes.
 
  -- intrigeri <intrigeri@boum.org>  Sat, 19 Nov 2016 13:54:34 +0000
 
