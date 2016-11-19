@@ -320,7 +320,7 @@ Configure_syslinux_templates ()
 {
 	templates="$(find ${SYSLINUX_PATH} -type f -name '*.cfg' -o -name '*.txt')"
 
-	if [ "${SOURCE_DATE_EPOCH:-}" = "" ]
+	if [ "${SOURCE_DATE_EPOCH:-}" != "" ]
 	then
 		_DATE=$(date --utc --date="@${SOURCE_DATE_EPOCH}" -R)
 	else
