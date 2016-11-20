@@ -13,6 +13,6 @@
 # the build process:
 Clamp_mtimes ()
 {
-	find "${@}" -newermt "@${SOURCE_DATE_EPOCH}" -print0 | \
+	find "${@}" -xdev -newermt "@${SOURCE_DATE_EPOCH}" -print0 | \
 		xargs -0r touch --no-dereference --date="@${SOURCE_DATE_EPOCH}"
 }
