@@ -69,6 +69,7 @@ lb chroot_hooks ${*}
 lb chroot_symlinks ${*}
 lb chroot_hacks ${*}
 lb chroot_interactive ${*}
+lb chroot_reproducible ${*}
 
 # Deconfiguring chroot
 lb chroot_linux-image remove ${*}
