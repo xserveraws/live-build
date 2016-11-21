@@ -320,13 +320,6 @@ Configure_syslinux_templates ()
 {
 	templates="$(find ${SYSLINUX_PATH} -type f -name '*.cfg' -o -name '*.txt')"
 
-	if [ "${SOURCE_DATE_EPOCH:-}" != "" ]
-	then
-		_DATE=$(date --utc --date="@${SOURCE_DATE_EPOCH}" -R)
-	else
-		_DATE=$(date -R)
-	fi
-
 	for template_file in ${templates}
 	do
 		sed -i -e "s|{\$LINUX_LIVE}|${LINUX_LIVE}|" \
@@ -337,7 +330,7 @@ Configure_syslinux_templates ()
 		       -e "s|{\$LIVE_KERNEL_PATH}|${LIVE_KERNEL_PATH}|" \
 		       -e "s|{\$SPLASH}|${SPLASH}|" \
 		       -e "s|{\$LB_DISTRIBUTION}|${LB_DISTRIBUTION}|" \
-		       -e "s|{\$LB_DATE}|${_DATE}|" \
+		       -e "s|{\$LB_DATE}|$(Date -R)}|" \
 		       -e "s|{\$LB_MEDIA}|${MEDIA}|" \
 		       -e "s|{\$LB_VERSION}|${VERSION}|" \
 		       -e "s|{\$LB_SYSLINUX_TIMEOUT}|${LB_SYSLINUX_TIMEOUT}0|" \

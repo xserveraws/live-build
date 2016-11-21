@@ -52,13 +52,7 @@ ARCHITECTURE="$(echo ${LB_ARCHITECTURE} | sed -e 's| |/|g')"
 DISTRIBUTION="$(echo ${LB_DISTRIBUTION} | cut -b 1 | tr '[a-z]' '[A-Z]')"
 DISTRIBUTION="${DISTRIBUTION}$(echo ${LB_DISTRIBUTION} | cut -b 2-)"
 eval VERSION="$`echo RELEASE_${LB_DISTRIBUTION}`"
-
-if [ "${SOURCE_DATE_EPOCH:-}" = "" ]
-then
-	DATE="$(date +%Y%m%d-%H:%M)"
-else
-	DATE="$(date --utc --date="@${SOURCE_DATE_EPOCH}" +%Y%m%d-%H:%M)"
-fi
+DATE="$(Date +%Y%m%d-%H:%M)"
 
 TITLE="Debian GNU/Linux"
 case "${LB_MODE}" in
