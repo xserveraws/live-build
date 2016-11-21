@@ -256,7 +256,7 @@ case "${LB_BINARY_IMAGES}" in
 		sed -i -e "s|LB_BOOTAPPEND_INSTALL|${LB_BOOTAPPEND_INSTALL}|" \
 		       -e "s|LB_BOOTAPPEND_LIVE|${LB_BOOTAPPEND_LIVE}|" \
 		       binary/boot/silo.conf
-		sed -i -e "s|LB_DATE|$(date +%Y%m%d)|" \
+		sed -i -e "s|LB_DATE|$(Date +%Y%m%d)|" \
 		       -e "s|LB_VERSION|${VERSION}|" \
 		       -e "s|LB_DISTRIBUTION|${LB_DISTRIBUTION}|" \
 		       binary/boot/debian.txt
